@@ -1,4 +1,4 @@
-# abseil-cpp - Abseil C++ Common Libraries
+# abseil-cpp - Abseil common C++ libraries augmenting the standard library
 
 This is a `build2` package repository for
 [`abseil-cpp`](https://github.com/abseil/abseil-cpp), a collection of C++
