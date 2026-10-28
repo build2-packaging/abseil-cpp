@@ -1,4 +1,4 @@
-import libs = libabseil%liba{abseil}
+import libs = libabseil%lib{abseil}
 import libs += gtest%lib{gtest}
 import libs += gmock%lib{gmock}
 
