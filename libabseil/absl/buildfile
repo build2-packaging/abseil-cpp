@@ -63,8 +63,14 @@ if ($cxx.target.class == 'windows')
 # without which Clang emits .weak.* helper symbols that link.exe refuses
 # to export (LNK1242).
 #
+# Note also that the data symbols end up exported both with ABSL_DLL and
+# by the .def file, which link.exe points out with the benign LNK4197.
+#
 if ($cxx.target.system == 'win32-msvc')
+{
   objs{*}: cxx.poptions += -DABSL_BUILD_DLL
+  libs{abseil}: cxx.loptions += /IGNORE:4197
+}
 
 # GCC reports a false-positive -Wmaybe-uninitialized for InlinedVector
 # storage when inlining aggressively into cord.cc (upstream suppresses the

@@ -42,6 +42,11 @@ libabseil/absl/random symlink=dir
 libabseil/absl/status symlink=dir
 libabseil/absl/strings symlink=dir
 libabseil/absl/synchronization symlink=dir
-libabseil/absl/time symlink=dir
+# absl/time/ is broken out into real directories down to cctz/src/ so that
+# zone_info_source.cc can be patched (see README-DEV.md). The directory
+# symlinks inside it are declared individually.
+#
+libabseil/absl/time/internal/cctz/include symlink=dir
+libabseil/absl/time/internal/cctz/testdata symlink=dir
 libabseil/absl/types symlink=dir
 libabseil/absl/utility symlink=dir
