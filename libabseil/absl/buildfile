@@ -45,6 +45,15 @@ if ($cxx.target.class == 'windows')
   if ($cxx.class == 'msvc')
     cxx.coptions += /bigobj /wd4005 /wd4068 /wd4180 /wd4244 /wd4267 \
                     /wd4503 /wd4800
+
+  # MinGW GCC ignores the MSVC-specific #pragma comment(lib) and #pragma
+  # warning directives (we link the requested libraries ourselves, see
+  # below). It also checks the ABSL_PRINTF_ATTRIBUTE functions against the
+  # MSVCRT format and so rejects %zu even though libstdc++ selects the
+  # MinGW ANSI stdio implementation that supports it.
+  #
+  if ($cxx.target.system == 'mingw32' && $cxx.id == 'gcc')
+    cxx.coptions += -Wno-unknown-pragmas -Wno-format
 }
 
 # Build and consume the MSVC DLL the same way as upstream: export functions
