@@ -8,9 +8,6 @@ import libs += gmock%lib{gmock}
 #
 exe{driver}: cxx{driver} cxx{**_test} $libs
 
-# The absl/ and gtest/ headers come from the imported libraries' exported
-# preprocessor options, so no local include search paths are needed.
-
 # Match upstream's MSVC test configuration, which silences the CRT
 # deprecation of functions like strncpy() used by the tests.
 #
