@@ -1,6 +1,0 @@
-$out_root/
-{
-  include libabseil/tests/
-}
-
-export $out_root/libabseil/tests/$import.target
