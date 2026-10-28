@@ -86,27 +86,27 @@ if ($cxx.class == 'gcc')
   }
 }
 
-# System libraries.
+# System libraries. Note that advapi32, which sysinfo.cc uses for the
+# registry, is linked by default on Windows.
 #
-switch $cxx.target.class
+switch $cxx.target.class, $cxx.target.system
 {
+  case 'windows', 'mingw32'
+    cxx.libs += -lbcrypt -ldbghelp
+
   case 'windows'
-  {
-    if ($cxx.target.system == 'mingw32')
-      cxx.libs += -ladvapi32 -lbcrypt -ldbghelp
-    else
-      cxx.libs += advapi32.lib bcrypt.lib dbghelp.lib
-  }
+    cxx.libs += bcrypt.lib dbghelp.lib
+
   case 'macos'
   {
     # cctz's time_zone_lookup uses CoreFoundation to resolve the local time
     # zone on Apple platforms.
     #
-    cxx.libs += -lpthread
-    cxx.libs += -framework CoreFoundation
+    cxx.libs += -pthread -framework CoreFoundation
   }
+
   default
-    cxx.libs += -lpthread
+    cxx.libs += -pthread
 }
 
 if ($cxx.target.system == 'mingw32')
