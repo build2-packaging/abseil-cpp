@@ -1,0 +1,7 @@
+: 1
+name: libabseil
+version: 2025.512.1+1
+language: c++
+project: abseil-cpp
+summary: Abseil common C++ libraries augmenting the standard library
+license: Apache-2.0
