@@ -1,6 +1,6 @@
 : 1
 name: libabseil
-version: 2025.127.2+1
+version: 2025.512.1-a.0.z
 language: c++
 project: abseil-cpp
 summary: Abseil - C++ Common Libraries
