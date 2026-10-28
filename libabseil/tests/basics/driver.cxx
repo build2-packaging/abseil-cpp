@@ -11,12 +11,13 @@
 #undef NDEBUG
 #include <cassert>
 
-int main ()
+int
+main ()
 {
   // strings: StrCat is a non-inline function defined in str_cat.cc.
   //
-  std::string s (absl::StrCat ("abseil-", 20250127, "-", "ok"));
-  assert (s == "abseil-20250127-ok");
+  std::string s (absl::StrCat ("abseil-", 20250512, "-", "ok"));
+  assert (s == "abseil-20250512-ok");
 
   // strings: StrSplit (str_split.cc).
   //
