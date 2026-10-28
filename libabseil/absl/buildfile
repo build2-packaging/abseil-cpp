@@ -47,6 +47,16 @@ if ($cxx.target.class == 'windows')
                     /wd4503 /wd4800
 }
 
+# Build and consume the MSVC DLL the same way as upstream: export functions
+# with the automatically generated .def file and data with ABSL_DLL, which
+# is __declspec(dllexport) while building and __declspec(dllimport) while
+# consuming. Note that ABSL_BUILD_DLL also disables ABSL_ATTRIBUTE_WEAK,
+# without which Clang emits .weak.* helper symbols that link.exe refuses
+# to export (LNK1242).
+#
+if ($cxx.target.system == 'win32-msvc')
+  objs{*}: cxx.poptions += -DABSL_BUILD_DLL
+
 # The AES-NI hardware-accelerated random backend uses x86 ISA intrinsics
 # that must be enabled at compile time (matching upstream's per-file
 # ABSL_RANDOM_RANDEN_COPTS).
@@ -88,31 +98,8 @@ lib{abseil}:
   cxx.export.libs = $intf_libs
 }
 
-# Abseil's MSVC-ABI DLL configuration is not a configuration we can
-# support with packaging glue alone.
-#
-# There are two separate issues. First, several Abseil components rely
-# on process-wide globals crossing the DLL boundary correctly (for
-# example the SwissTable sentinel state). If those globals are
-# duplicated between the DLL and its consumers, the library can fail at
-# runtime with SwissTable "full table!" aborts. Second, the automatic
-# MSVC .def export path sees cctz's /alternatename weak-alias linker
-# directive as if it were an exportable symbol, which link.exe rejects
-# with LNK1242.
-#
-# We could special-case the generated .def and filter or patch the
-# weak-alias entry, as some build systems/packages do, but that would
-# only address the link-time symptom. It would still leave us
-# maintaining a fragile MSVC DLL configuration for a library whose
-# Windows shared-library support is not a primary upstream use case.
-#
-# Therefore, with the MSVC ABI, build Abseil as a static library only.
-# This is also the variant normally consumed by MSVC-ABI users. Note
-# that exceptionally, MinGW uses a different export/link path and is
-# left free to build shared libraries.
-#
 if ($cxx.target.system == 'win32-msvc')
-  lib{abseil}: bin.lib = static
+  libs{abseil}: cxx.export.poptions += -DABSL_CONSUME_DLL
 
 # For pre-releases use the complete version to make sure they cannot
 # be used in place of another pre-release or the final version. See
