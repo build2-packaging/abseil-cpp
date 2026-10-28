@@ -1,6 +1,7 @@
-# Uncomment to suppress warnings coming from external libraries.
+# Suppress warnings coming from external libraries (GoogleTest and Abseil
+# headers). We only want to hear about the upstream tests themselves.
 #
-#cxx.internal.scope = current
+cxx.internal.scope = current
 
 cxx.std = latest
 
