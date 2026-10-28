@@ -66,6 +66,13 @@ if ($cxx.target.class == 'windows')
 if ($cxx.target.system == 'win32-msvc')
   objs{*}: cxx.poptions += -DABSL_BUILD_DLL
 
+# GCC reports a false-positive -Wmaybe-uninitialized for InlinedVector
+# storage when inlining aggressively into cord.cc (upstream suppresses the
+# same warning in other parts of inlined_vector.h).
+#
+if ($cxx.id == 'gcc')
+  {obja objs}{strings/cord}: cxx.coptions += -Wno-maybe-uninitialized
+
 # The hardware-accelerated AES random backend uses ISA intrinsics that GCC
 # and Clang only make available with the corresponding target options (MSVC
 # needs none). The backend is only selected if the CPU supports it at
