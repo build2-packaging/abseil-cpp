@@ -66,12 +66,25 @@ if ($cxx.target.class == 'windows')
 if ($cxx.target.system == 'win32-msvc')
   objs{*}: cxx.poptions += -DABSL_BUILD_DLL
 
-# The AES-NI hardware-accelerated random backend uses x86 ISA intrinsics
-# that must be enabled at compile time (matching upstream's per-file
-# ABSL_RANDOM_RANDEN_COPTS).
+# The hardware-accelerated AES random backend uses ISA intrinsics that GCC
+# and Clang only make available with the corresponding target options (MSVC
+# needs none). The backend is only selected if the CPU supports it at
+# runtime, so these options are confined to this one translation unit, the
+# same as upstream's ABSL_RANDOM_RANDEN_COPTS.
 #
-if ($cxx.target.cpu == 'x86_64' || $cxx.target.cpu == 'i386')
-  {obja objs}{random/internal/randen_hwaes}: cxx.coptions += -maes -msse4.1
+if ($cxx.class == 'gcc')
+{
+  switch $cxx.target.cpu
+  {
+    case 'x86_64'
+      {obja objs}{random/internal/randen_hwaes}: \
+        cxx.coptions += -maes -msse4.1
+
+    case 'aarch64'
+      {obja objs}{random/internal/randen_hwaes}: \
+        cxx.coptions += -march=armv8-a+crypto
+  }
+}
 
 # System libraries.
 #
