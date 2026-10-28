@@ -1,4 +1,4 @@
-# libabseil - Abseil C++ Common Libraries
+# libabseil - Abseil common C++ libraries augmenting the standard library
 
 This is a `build2` package for the
 [`abseil-cpp`](https://github.com/abseil/abseil-cpp) C++ library. Abseil is an
@@ -19,12 +19,3 @@ Then import the library in your `buildfile`:
 ```
 import libs = libabseil%lib{abseil}
 ```
-
-## Importable targets
-
-This package provides the following importable targets:
-
-```
-lib{abseil}
-```
-
